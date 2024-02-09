@@ -12,6 +12,7 @@ pub struct Simulation {
 #[derive(Clone, Debug, Serialize)]
 pub struct World {
     pub creatures: Vec<Creature>,
+    pub resources: Vec<Resource>,
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -20,6 +21,12 @@ pub struct Creature {
     pub y: f32,
     pub rotation: f32,
     pub speed: f32,
+}
+
+#[derive(Clone, Debug, Serialize)]
+pub struct Resource {
+    pub x: f32,
+    pub y: f32,
 }
 
 #[wasm_bindgen]
@@ -35,12 +42,21 @@ impl Simulation {
         let world = World::from(self.sim.world());
         serde_wasm_bindgen::to_value(&world).unwrap()
     }
+
+    // triggers movement for all entity instances capable of movement
+    pub fn step(&mut self) {
+        self.sim.step(&mut self.rng);
+    }
 }
 
 impl From<&sim::World> for World {
     fn from(world: &sim::World) -> Self {
         let creatures = world.creatures().iter().map(Creature::from).collect();
-        Self { creatures }
+        let resources = world.resources().iter().map(Resource::from).collect();
+        Self {
+            creatures,
+            resources,
+        }
     }
 }
 
@@ -51,6 +67,15 @@ impl From<&sim::Creature> for Creature {
             y: creature.position().y,
             rotation: creature.rotation().angle(),
             speed: creature.speed(),
+        }
+    }
+}
+
+impl From<&sim::Resource> for Resource {
+    fn from(resource: &sim::Resource) -> Self {
+        Self {
+            x: resource.position().x,
+            y: resource.position().y,
         }
     }
 }
