@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+  <meta charset="utf-8">
+  <title>🐦Larxons🧠</title>
+</head>
+<style>
+  body {
+    background: rgba(90, 40, 4, 0.651);
+  }
+
+  #viewport {
+    width: 100%;
+    /* Optionally set a max-width if you want to limit the canvas size */
+    max-width: 100%;
+  }
+</style>
+
+<body>
+  <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+  <canvas id="viewport" width=device-width height="device-height"></canvas>
+  <script src="./bootstrap.js"></script>
+  <script>// Resize Handler
+    function resizeCanvas() {
+      var canvas = document.getElementById('viewport');
+      var aspectRatio = canvas.width / canvas.height; // Adjust this value according to your needs
+
+      canvas.width = canvas.offsetWidth; // Set canvas width to its offsetWidth
+      canvas.height = canvas.offsetWidth / aspectRatio; // Calculate new height based on aspect ratio
+    }
+
+    // Initial resize
+    resizeCanvas();
+
+    // Event listener for window resize
+    window.addEventListener('resize', resizeCanvas);</script>
+</body>
+
+</html>
