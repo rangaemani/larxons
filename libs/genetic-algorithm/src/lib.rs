@@ -270,9 +270,9 @@ impl MutationMethod for GaussianMutation {
         }
     }
 }
+
 /////////////////TESTS/////////////////////
 #[cfg(test)]
-
 mod tests {
     use super::*;
 
