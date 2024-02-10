@@ -1,8 +1,9 @@
 import * as sim from "lib-simulation-wasm"
 
-const simulation = new sim.Simulation();
-const world = simulation.world();
-console.log(world);
+let simulation = new sim.Simulation();
+document.getElementById('train').onclick = function () {
+    console.log(simulation.train());
+};
 // fix browser pixel scaling
 const viewport = document.getElementById('viewport');
 const viewportWidth = viewport.width;
@@ -46,7 +47,7 @@ CanvasRenderingContext2D.prototype.drawCreature = function (x, y, size, rotation
     this.strokeStyle = `rgb(90, 20, 0)`
     this.stroke();
 
-    this.fillStyle = `rgba(0, 255, 255, .3)`
+    this.fillStyle = `rgba(0, 255, 255, .5)`
     this.fill();
 };
 

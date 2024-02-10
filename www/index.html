@@ -8,19 +8,27 @@
 </head>
 <style>
   body {
-    background: rgba(90, 40, 4, 0.651);
+    background: rgba(255, 223, 223, 1);
   }
 
   #viewport {
-    width: 100%;
+    width: 85vw;
     /* Optionally set a max-width if you want to limit the canvas size */
     max-width: 100%;
+  }
+
+  #train {
+    position: absolute;
+    top: 0;
+    width: 10vw;
+    margin: 15px;
   }
 </style>
 
 <body>
   <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
   <canvas id="viewport" width=device-width height="device-height"></canvas>
+  <button id="train">Train Generation</button>
   <script src="./bootstrap.js"></script>
   <script>// Resize Handler
     function resizeCanvas() {
