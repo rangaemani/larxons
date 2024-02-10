@@ -1,6 +1,6 @@
 # Larxons
 
-Larxons is a neural network project inspired by [this post](https://pwy.io/posts/learning-to-fly-pt1/). It's written in Rust and relies on cargo, npm, webpack, and WASM.
+Larxons is an evolutionary semantic network built on a framework inspired by [this post](https://pwy.io/posts/learning-to-fly-pt1/). It's written in Rust and relies on cargo, npm, webpack, and WASM.
 
 ## Getting Started
 
