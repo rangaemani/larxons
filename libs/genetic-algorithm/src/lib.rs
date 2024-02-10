@@ -31,6 +31,13 @@ pub trait MutationMethod {
 }
 
 #[derive(Clone, Debug)]
+pub struct Statistics {
+    min_fitness: f32,
+    max_fitness: f32,
+    avg_fitness: f32,
+}
+
+#[derive(Clone, Debug)]
 pub struct UniformGeneticCrossover;
 
 #[derive(Clone, Debug)]
@@ -163,12 +170,12 @@ where
         }
     }
 
-    pub fn evolve<T>(&self, rng: &mut dyn RngCore, population: &[T]) -> Vec<T>
+    pub fn evolve<T>(&self, rng: &mut dyn RngCore, population: &[T]) -> (Vec<T>, Statistics)
     where
         T: Individual,
     {
         assert!(!population.is_empty());
-        (0..population.len())
+        let new_population = (0..population.len())
             .map(|_| {
                 let parent_a = self
                     .selection_method
@@ -184,7 +191,50 @@ where
                 self.mutation_method.mutate(rng, &mut child);
                 T::create(child)
             })
-            .collect()
+            .collect();
+
+        let stats = Statistics::new(population);
+
+        (new_population, stats)
+    }
+}
+
+impl Statistics {
+    fn new<I>(population: &[I]) -> Self
+    where
+        I: Individual,
+    {
+        assert!(!population.is_empty());
+
+        let mut min_fitness = population[0].fitness();
+        let mut max_fitness = min_fitness;
+        let mut sum_fitness = 0.0;
+
+        for individual in population {
+            let fitness = individual.fitness();
+
+            min_fitness = min_fitness.min(fitness);
+            max_fitness = max_fitness.max(fitness);
+            sum_fitness += fitness;
+        }
+
+        Self {
+            min_fitness,
+            max_fitness,
+            avg_fitness: sum_fitness / (population.len() as f32),
+        }
+    }
+
+    pub fn min_fitness(&self) -> f32 {
+        self.min_fitness
+    }
+
+    pub fn max_fitness(&self) -> f32 {
+        self.max_fitness
+    }
+
+    pub fn avg_fitness(&self) -> f32 {
+        self.avg_fitness
     }
 }
 
@@ -693,8 +743,8 @@ mod tests {
         #[test]
         fn test_genetic_algorithm_evolution() {
             let mut rng = ChaCha8Rng::from_seed(Default::default());
-
-            let ga = GeneticAlgorithm::new(
+            let mut stats;
+            let algo = GeneticAlgorithm::new(
                 RankBasedSelection::new(),
                 UniformGeneticCrossover::new(),
                 GaussianMutation::new(0.5, 0.5),
@@ -708,7 +758,7 @@ mod tests {
             ];
 
             for _ in 0..10 {
-                population = ga.evolve(&mut rng, &population);
+                (population, stats) = algo.evolve(&mut rng, &population);
             }
 
             // Define the expected population after evolution

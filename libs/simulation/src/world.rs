@@ -1,8 +1,8 @@
 use crate::*;
 #[derive(Debug)]
 pub struct World {
-    creatures: Vec<Creature>,
-    resources: Vec<Resource>,
+    pub(crate) creatures: Vec<Creature>,
+    pub(crate) resources: Vec<Resource>,
 }
 
 impl World {
